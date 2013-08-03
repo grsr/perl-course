@@ -5,13 +5,8 @@ use strict;
 use warnings;
 
 
-if (exists $ARGV[0]) {
-    my $seq = $ARGV[0];
-    print "Sequence $seq has " . gcpc($seq) . "% GC and is ", length $seq, " bases long\n";
-}
-else {
-    print "Please provide a DNA sequence\n";
-}
+my $seq = $ARGV[0];
+print "Sequence $seq has " . gcpc($seq) . "% GC and is ", length $seq, " bases long\n";
 
 sub gcpc {
     my ($sequence) = @_;
