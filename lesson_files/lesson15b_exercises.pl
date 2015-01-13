@@ -17,30 +17,26 @@ print "$dna\n";
 # Exercise II
 # Print out sequences from a FASTA file downstream of a transcription start site
 
-my $header;
-my $seq;
-my %faseqs;
+sub find_tss {
+	my $seq = shift;
+	if ($seq =~ /TATTAT(.+)/) {
+		print "$1\n";
+	}
+}
 
+my $seq = '';
 open my $fa, '<', 'lesson13_file5.fasta' or die "Can't open FASTA file!\n";
 
-my $foundsite = 0;
 while (my $line = <$fa>) {
-    chomp $line;
-    if ($line =~ /^>(.+)$/) {
-        $header = $1;
-        $foundsite = 0;
-        $faseqs{$header} = '-';
-    }
-    elsif ($foundsite == 1) {
-        $faseqs{$header} .= $line;
-    }
-    elsif ($line =~ /TATTAT(.+)/) {
-        $faseqs{$header} = $1;
-        $foundsite = 1;
-    }
+	chomp $line;
+	if ($line =~ /^>(.+)/) {
+		if ($seq ne '') {
+			find_tss($seq);
+			$seq = '';
+		}
+	}
+	else {
+		$seq .= $line;
+	}
 }
-close $fa;
-
-foreach my $name (keys %faseqs) {
-    print "$name\t$faseqs{$name}\n";
-}
+find_tss($seq);
